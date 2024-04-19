@@ -29,7 +29,7 @@ class MovieController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'poster' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'poster' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         // $file = $request->file('poster');
@@ -42,8 +42,10 @@ class MovieController extends Controller
 
         if ($request->hasFile('poster')) {
             $poster = $request->file('poster');
-            $posterPath = $poster->store('posters', 'public');
-            $movie->poster = $posterPath;
+            $posterName = time() . '_' . $poster->getClientOriginalName(); // Use a unique name for the poster
+            $posterPath = $poster->storeAs('public/posters', $posterName);
+            $posterFinal = str_replace('public/', '', $posterPath);
+            $movie->poster = asset('storage/' . $posterFinal);
         }
 
         else {
