@@ -3,7 +3,7 @@ import { ref } from 'vue';
 
 const title = ref('');
 const description = ref('');
-let poster = null;
+let poster = ref(null);
 const message = ref(null);
 
 const saveMovie = async () => {
@@ -47,7 +47,6 @@ const handleFileUpload = (event) => {
     <h2>Add New Movie</h2>
 
         <div v-if="message" :class="['alert', message.type === 'success' ? 'alert-success' : 'alert-danger']">{{ message.text }}</div>
-
 
     <form id="movieForm" @submit.prevent="saveMovie" enctype="multipart/form-data">
 

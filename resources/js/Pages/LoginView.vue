@@ -2,43 +2,47 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-let email = ref('');
-let password = ref('');
+const credentials = ref({
+    email: '',
+    password: ''
+  });
 let error = ref(null);
 let message = ref(null);
 
 const router = useRouter();
 
-const login = async () => {
-  try {
-    const response = await fetch('/api/v1/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: email.value,
-        password: password.value
-      })
-    });
-
-    if (response.ok) {
-      const { token } = await response.json();
-      localStorage.setItem('token', token);
-      router.push('/'); // Redirect to the home page
-      message.value = { type: 'success', text: 'Login successful!' };
-      error.value = null; // Reset error message
-      // Redirect to a different page upon successful login
-    } else {
-      const errorMessage = await response.text();
-      throw new Error(errorMessage);
+function login() {
+  fetch('/api/v1/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials.value)
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Login failed');
     }
-  } catch (error) {
-    console.error(error);
-    message.value = { type: 'error', text: 'Failed to login. Please check your credentials and try again.' };
-    // Reset success message
-  }
-};
+    return response.json();
+  })
+  .then(data => {
+    if (data.access_token) {
+      // Store the token in localStorage or cookies
+      localStorage.setItem('jwt_token', data.access_token);
+      message.value = { type: 'success', text: 'Login successful!' }; // Set success message
+      setTimeout(() => {
+        router.push('/movies'); // Redirect after setting message
+      }, 3000); // Redirect after 1 second
+    } else {
+      // Handle any additional error messages if you have a specific format
+      message.value = { type: 'error', text: 'Failed to login, please check your credentials.' };
+    }
+  })
+  .catch(error => {
+    message.value = { type: 'error', text: error.message }; // Set error message
+  });
+}
 </script>
 
 <template>
@@ -48,16 +52,16 @@ const login = async () => {
   <form @submit.prevent="login" class="mt-3">
     <div class="mb-3">
       <label for="email" class="form-label">Email</label>
-      <input type="email" id="email" v-model="email" class="form-control" required>
+      <input type="email" id="email" v-model="credentials.email" class="form-control" required>
     </div>
     <div class="mb-3">
       <label for="password" class="form-label">Password</label>
-      <input type="password" id="password" v-model="password" class="form-control" required>
+      <input type="password" id="password" v-model="credentials.password" class="form-control" required>
     </div>
-    <button type="submit" class="btn btn-primary">Login</button>
+    <button type="submit" class="btn btn-primary" style="margin-bottom:10px;">Login</button>
   </form>
 
   <div v-if="error" class="mt-3 alert alert-danger">{{ error }}</div>
-  <div v-if="message" :class="['mt-3', 'alert', 'alert-' + message.type]">{{ message.text }}</div>
+  <div v-if="message" :class="['alert', message.type === 'success' ? 'alert-success' : 'alert-danger']">{{ message.text }}</div>
 </div>
 </template>
