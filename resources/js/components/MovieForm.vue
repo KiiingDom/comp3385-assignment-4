@@ -8,6 +8,7 @@ const message = ref(null);
 
 const saveMovie = async () => {
   try {
+    const token = localStorage.getItem('jwt_token');
     const formData = new FormData();
     formData.append('title', title.value);
     formData.append('description', description.value);
@@ -18,6 +19,7 @@ const saveMovie = async () => {
       body: formData,
       headers: {
         'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
     });
 
@@ -37,9 +39,12 @@ const saveMovie = async () => {
 };
 
 
-const handleFileUpload = (event) => {
+
+function handleFileUpload (event) {
   poster = event.target.files[0];
 };
+
+
 </script>
 
 <template>

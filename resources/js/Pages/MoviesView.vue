@@ -29,8 +29,8 @@ const getPosterUrl = (poster) => {
   if (poster.startsWith('http')) {
     return poster;
   }
-  // Otherwise, construct the full URL based on the API route
-  return `/api/v1/${poster}`;
+  // Remove the '/api/v1/' prefix from the poster path
+  return poster.replace('/api/v1/', '');
 };
 
 onMounted(() => {
@@ -44,7 +44,7 @@ onMounted(() => {
     <div class="row">
       <div v-for="movie in movies" :key="movie.id" class="col-md-4 mb-4">
         <div class="card">
-          <img :src="getPosterUrl(movie.poster)" class="card-img-top" alt="Movie Poster">
+          <img :src="~getPosterUrl(movie.poster)" class="card-img-top" alt="Movie Poster">
           <div class="card-body">
             <h5 class="card-title">{{ movie.title }}</h5>
             <p class="card-text">{{ movie.description }} </p>
