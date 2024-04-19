@@ -30,9 +30,11 @@ function login() {
     if (data.access_token) {
       // Store the token in localStorage or cookies
       localStorage.setItem('jwt_token', data.access_token);
-      message.value = { type: 'success', text: 'Login successful!' }; // Set success message
+      message.value = { type: 'success', text: 'Login successful! \nPlease wait to view the movies section.' }; // Set success message
       setTimeout(() => {
-        router.push('/movies'); // Redirect after setting message
+        router.push('/movies').then (() => {
+          window.location.reload();
+        }); // Redirect after setting message
       }, 3000); // Redirect after 1 second
     } else {
       // Handle any additional error messages if you have a specific format
