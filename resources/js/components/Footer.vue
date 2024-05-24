@@ -5,7 +5,7 @@
 <template>
     <footer class="bg-light py-3">
         <div class="container">
-            Copyright &copy; 2024, COMP3385 Web Dev Superstars ✨
+            ✨Copyright &copy; 2024, CourseM8✨
         </div>
     </footer>
 </template>

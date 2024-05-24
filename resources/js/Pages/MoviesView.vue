@@ -40,7 +40,7 @@ onMounted(() => {
 
 <template>
   <div class="container mt-5">
-    <h2>Movies</h2>
+    <h2>Courses</h2>
     <div class="row">
       <div v-for="movie in movies" :key="movie.id" class="col-md-4 mb-4">
         <div class="card">

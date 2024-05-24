@@ -49,7 +49,7 @@ function handleFileUpload (event) {
 
 <template>
   <div class="container mt-5">
-    <h2>Add New Movie</h2>
+    <h2>Add New Course</h2>
 
         <div v-if="message" :class="['alert', message.type === 'success' ? 'alert-success' : 'alert-danger']">{{ message.text }}</div>
 

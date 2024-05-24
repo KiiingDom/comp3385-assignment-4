@@ -30,7 +30,7 @@ function login() {
     if (data.access_token) {
       // Store the token in localStorage or cookies
       localStorage.setItem('jwt_token', data.access_token);
-      message.value = { type: 'success', text: 'Login successful! \nPlease wait to view the movies section.' }; // Set success message
+      message.value = { type: 'success', text: 'Login successful! \nPlease wait to view the courses section.' }; // Set success message
       setTimeout(() => {
         router.push('/movies').then (() => {
           window.location.reload();
